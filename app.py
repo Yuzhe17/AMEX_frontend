@@ -3,6 +3,7 @@ import streamlit as st
 from PIL import Image
 from pandas import read_csv
 import requests
+import json
 
 
 '''
@@ -27,17 +28,16 @@ with st.form("my_form"):
 
 
 
-
 if submitted:
 
-    # url_predict = ''
-    if uploaded_csv_file == None:
-        params_user = 'No CSV uploaded'
-    else:
-        params_user = read_csv(uploaded_csv_file).to_dict(orient='records')
+    url_predict = 'https://amex-api-generator.herokuapp.com/predict'
 
-    # predictions = requests.get(url_predict,
-    #                            params = params_user[0]).json()
+    if uploaded_csv_file == None:
+        response = 'No CSV uploaded'
+    else:
+        data = read_csv(uploaded_csv_file).fillna('').to_dict(orient='records')[0]
+        params = {"data": json.dumps(data)}
+        response = requests.get(url_predict, params=params).json()
 
 
     json_url = 'https://amex-api-generator.herokuapp.com/'
@@ -48,7 +48,7 @@ if submitted:
              f'\n\nYour customer with customer_ID: {api_json_data["customer_ID"]} must be a {api_json_data["output"]}!!!!',
              f'\n\nWith probability of {float(api_json_data["probability"])*100} %',
              '\n\n-------------',
-             f'\n\n{params_user}')
+             f'\n\n{response}')
 
 
 isis_img = Image.open('team_imgs/isis.jpeg')
