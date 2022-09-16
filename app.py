@@ -8,9 +8,7 @@ import matplotlib.pyplot as plt
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
-
 # from catboost import *
-
 
 
 st.set_page_config(page_title="AMEX ORACLE", page_icon='',layout="wide")
